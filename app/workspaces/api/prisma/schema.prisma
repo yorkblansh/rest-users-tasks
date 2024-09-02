@@ -4,12 +4,18 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model User {                                                   
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId  
-  email String  @unique                                        
-  name  String?                                                
-}                                                              
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model Task {
+  id   Int    @id @default(autoincrement())
+  name String
+  body String
+}
