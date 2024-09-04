@@ -45,6 +45,7 @@
 		"express": "^4.19.2",
 		"fill-range": "^7.0.1",
 		"fp-ts": "^2.13.1",
+		"lodash": "^4.17.21",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"reflect-metadata": "^0.1.13",
