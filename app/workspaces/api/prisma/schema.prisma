@@ -19,3 +19,11 @@ model Task {
   name String
   body String
 }
+
+// model Roles {
+//   manage Int @unique
+//   create Int @unique
+//   read   Int @unique
+//   update Int @unique
+//   delete Int @unique
+// }

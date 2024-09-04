@@ -28,6 +28,11 @@ import { CheckIshpiDiapasonDto } from './dto/check.ishpi.diapason.dto'
 import { UserDto } from './dto/user.api.dto'
 import { UserByIdDto } from './dto/user.by.id.api.dto'
 import { UpdateUserDto } from './dto/update.user.api.dto'
+import {
+	AbilityFactory,
+	Action,
+} from '../ability/ability.factory/ability.factory'
+import { CheckAbilities } from 'src/ability/abilities.decorator'
 
 interface ReportDates {
 	date_from: string
@@ -43,7 +48,10 @@ console.log({ postfixTest })
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-	constructor(private readonly prismaService: PrismaService) {}
+	constructor(
+		private readonly prismaService: PrismaService,
+		private abilityFactory: AbilityFactory,
+	) {}
 
 	@Post('/create_user')
 	async createUser(@Body() body: UserDto) {
@@ -97,6 +105,7 @@ export class UserController {
 	}
 
 	@Post('/delete_user')
+	@CheckAbilities({ action: Action.Delete, subject: UserDto })
 	async deleteUser(@Body() body: UserByIdDto) {
 		const { id } = body
 
