@@ -22,4 +22,14 @@ export class UserDto {
 		description: 'user email',
 	})
 	email: string
+
+	/**
+	 * user password
+	 */
+	@IsString()
+	@ApiProperty({
+		example: 'password',
+		description: 'user password',
+	})
+	password: string
 }

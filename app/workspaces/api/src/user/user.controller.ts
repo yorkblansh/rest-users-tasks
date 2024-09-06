@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Put, Patch } from '@nestjs/common'
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Put,
+	Patch,
+	UseGuards,
+	Request,
+} from '@nestjs/common'
 import { pipe } from 'fp-ts/lib/function'
 import path, { join } from 'path'
 import { readFileAsync } from '../utils/readFileAsync'
@@ -32,7 +41,11 @@ import {
 	AbilityFactory,
 	Action,
 } from '../ability/ability.factory/ability.factory'
-import { CheckAbilities } from 'src/ability/abilities.decorator'
+import { CheckAbilities } from '../ability/abilities.decorator'
+import { AbilitiesGuard } from '../ability/abilities.guard'
+import { LocalAuthGuard } from '../auth/local-auth.guard'
+import { AuthService } from '../auth/auth.service'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 interface ReportDates {
 	date_from: string
@@ -49,18 +62,18 @@ console.log({ postfixTest })
 @Controller('user')
 export class UserController {
 	constructor(
-		private readonly prismaService: PrismaService,
-		private abilityFactory: AbilityFactory,
+		private readonly prismaService: PrismaService, // private readonly authService: AuthService,
 	) {}
 
 	@Post('/create_user')
 	async createUser(@Body() body: UserDto) {
-		const { email, name } = body
+		const { email, name, password } = body
 
 		const user = await this.prismaService.user.create({
 			data: {
 				email,
 				name,
+				password,
 			},
 		})
 
@@ -105,15 +118,16 @@ export class UserController {
 	}
 
 	@Post('/delete_user')
+	@UseGuards(JwtAuthGuard)
 	@CheckAbilities({ action: Action.Delete, subject: UserDto })
 	async deleteUser(@Body() body: UserByIdDto) {
-		const { id } = body
+		// const { id } = body
 
-		const user = await this.prismaService.user.delete({
-			where: {
-				id,
-			},
-		})
+		// const user = await this.prismaService.user.delete({
+		// 	where: {
+		// 		id,
+		// 	},
+		// })
 
 		return 'user was deleted'
 	}

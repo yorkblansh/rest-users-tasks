@@ -32,4 +32,14 @@ export class UpdateUserDto {
 		description: 'user email',
 	})
 	email: string
+
+	/**
+	 * user password
+	 */
+	@IsString()
+	@ApiProperty({
+		example: 'password',
+		description: 'user password',
+	})
+	password: string
 }
