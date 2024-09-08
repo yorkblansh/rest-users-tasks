@@ -11,14 +11,4 @@ export class UserByIdDto {
 		description: 'user id',
 	})
 	id: number
-
-	/**
-	 * user password
-	 */
-	@IsString()
-	@ApiProperty({
-		example: 'password',
-		description: 'user password',
-	})
-	password: string
 }

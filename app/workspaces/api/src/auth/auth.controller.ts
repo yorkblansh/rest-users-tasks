@@ -10,8 +10,9 @@ export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@UseGuards(LocalAuthGuard)
-	@Post('login')
+	@Post('/login')
 	login(@Request() req) {
+		console.log({ user: req.user })
 		// return { msg: 'logged in' }
 		return this.authService.login(req.user)
 	}

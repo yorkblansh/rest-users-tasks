@@ -2,6 +2,7 @@ import {
 	CanActivate,
 	ExecutionContext,
 	ForbiddenException,
+	Inject,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AbilityFactory } from './ability.factory/ability.factory'
@@ -11,32 +12,33 @@ import { ForbiddenError } from '@casl/ability'
 
 export class AbilitiesGuard implements CanActivate {
 	constructor(
-		private reflector: Reflector,
-		private caslAbilityFactory: AbilityFactory,
+		@Inject('AbilityFactory') private caslAbilityFactory: AbilityFactory,
 	) {}
 
 	canActivate(
 		context: ExecutionContext,
 	): boolean | Promise<boolean> | Observable<boolean> {
-		// const rules =
-		// 	this.reflector.get<RequiredRule[]>(CHECK_ABILITY, context.getHandler()) ||
-		// 	[]
+		const rules = Reflect.getMetadata(CHECK_ABILITY, context.getHandler()) || []
 
-		const user = context.switchToHttp().getRequest()
-		console.log({ user })
+		const user = context.switchToHttp().getRequest().user
+		console.log({
+			ABILITY_GUARD_LOG: user,
+			RR: rules,
+			caslAbilityFactory: this.caslAbilityFactory,
+		})
 
-		// const ability = this.caslAbilityFactory.defineAbility(user)
+		const ability = this.caslAbilityFactory.defineAbility(user)
 
-		// try {
-		// 	rules.forEach((rule) => {
-		// 		ForbiddenError.from(ability).throwUnlessCan(rule.action, rule.subject)
-		// 	})
+		try {
+			rules.forEach((rule) => {
+				ForbiddenError.from(ability).throwUnlessCan(rule.action, rule.subject)
+			})
 
-		// 	return true
-		// } catch (error) {
-		// 	if (error instanceof ForbiddenError) {
-		// 		throw new ForbiddenException(error.message)
-		// 	}
-		// }
+			return true
+		} catch (error) {
+			if (error instanceof ForbiddenError) {
+				throw new ForbiddenException(error.message)
+			}
+		}
 	}
 }

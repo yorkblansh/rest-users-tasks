@@ -9,9 +9,9 @@ import { AuthModule } from '../auth/auth.module'
 import { AuthService } from '../auth/auth.service'
 
 @Module({
+	imports: [HttpModule, PrismaModule],
 	controllers: [UserController],
 	providers: [UserService],
-	imports: [HttpModule, PrismaModule],
 	exports: [UserService],
 })
 export class UserModule {}
