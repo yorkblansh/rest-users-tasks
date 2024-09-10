@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { PrismaService } from '../../prisma/prisma.service'
 import _ from 'lodash'
@@ -9,11 +9,12 @@ import { Action } from '../ability/ability.factory/ability.factory'
 import { CheckAbilities } from '../ability/abilities.decorator'
 import { AbilitiesGuard } from '../ability/abilities.guard'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { PermissionsGuard } from '../ability1/permissions.guard'
+import { PermissionsGuard } from '../permissions/permissions.guard'
 import {
 	PERMISSIONS,
 	RequirePermissions,
-} from '../ability1/require.permission.decorator'
+} from '../permissions/require.permission.decorator'
+import { Prisma } from '@prisma/client'
 
 interface ReportDates {
 	date_from: string
@@ -49,8 +50,20 @@ export class UserController {
 	}
 
 	@Get('/get_all_users')
-	async getUser() {
-		const userList = await this.prismaService.user.findMany()
+	async getUser(
+		@Query('skip') skip?: string,
+		@Query('take') take?: string,
+		@Query('where') where?: Prisma.UserWhereInput,
+		@Query('cursor') cursor?: Prisma.UserWhereUniqueInput,
+		@Query('orderBy') orderBy?: Prisma.UserOrderByWithRelationInput,
+	) {
+		const userList = await this.prismaService.user.findMany({
+			skip: skip ? parseInt(skip) : undefined,
+			take: take ? parseInt(take) : undefined,
+			orderBy,
+			where,
+			cursor,
+		})
 
 		return userList
 	}

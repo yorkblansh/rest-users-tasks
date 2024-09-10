@@ -6,6 +6,7 @@ import {
 	Put,
 	Patch,
 	UseGuards,
+	Query,
 } from '@nestjs/common'
 import { pipe } from 'fp-ts/lib/function'
 import path, { join } from 'path'
@@ -39,9 +40,10 @@ import { UpdateTaskDto } from './dto/update.task.api.dto'
 import {
 	PERMISSIONS,
 	RequirePermissions,
-} from '../ability1/require.permission.decorator'
+} from '../permissions/require.permission.decorator'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { PermissionsGuard } from '../ability1/permissions.guard'
+import { PermissionsGuard } from '../permissions/permissions.guard'
+import { Prisma } from '@prisma/client'
 
 interface ReportDates {
 	date_from: string
@@ -60,8 +62,20 @@ export class TaskController {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	@Get('/get_all_task')
-	async getTask() {
-		const taskList = await this.prismaService.task.findMany()
+	async getTask(
+		@Query('skip') skip?: string,
+		@Query('take') take?: string,
+		@Query('where') where?: Prisma.TaskWhereInput,
+		@Query('cursor') cursor?: Prisma.TaskWhereUniqueInput,
+		@Query('orderBy') orderBy?: Prisma.TaskOrderByWithRelationInput,
+	) {
+		const taskList = await this.prismaService.task.findMany({
+			skip: skip ? parseInt(skip) : undefined,
+			take: take ? parseInt(take) : undefined,
+			orderBy,
+			where,
+			cursor,
+		})
 
 		return taskList
 	}
