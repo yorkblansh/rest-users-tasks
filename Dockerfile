@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install fish mc vim curl sudo tmux iputils-ping -y
 RUN echo 'root:123' | chpasswd
 RUN echo 'node:123' | chpasswd
 
-RUN npm i -g npm npm-check-updates bun pnpm
+RUN npm i -g npm npm-check-updates bun pnpm @nestjs/cli
 
 RUN sudo usermod -a -G sudo node
 
