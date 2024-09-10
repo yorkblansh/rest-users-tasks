@@ -9,7 +9,8 @@ import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { APP_GUARD } from '@nestjs/core'
 import { AbilitiesGuard } from './ability/abilities.guard'
-import { FileUploadModule } from './file-upload/file-upload.module';
+import { FileUploadModule } from './file-upload/file-upload.module'
+import { LoggerModule } from 'nestjs-pino'
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { FileUploadModule } from './file-upload/file-upload.module';
 		UserModule,
 		AuthModule,
 		FileUploadModule,
+		LoggerModule.forRoot(),
 		// AbilityModule,
 	],
 	controllers: [AppController],

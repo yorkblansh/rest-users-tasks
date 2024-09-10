@@ -9,10 +9,9 @@ import { diskStorage } from 'multer'
 			storage: diskStorage({
 				destination: './uploads',
 				filename: (req, file, cb) => {
-					console.log({ req: req.params })
+					const username = req.query.username as string
 
-					const filename = `${Date.now()}-${file.originalname}`
-					cb(null, filename)
+					cb(null, username + '.jpg')
 				},
 			}),
 		}),

@@ -8,7 +8,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { FileUploadService } from './file-upload.service'
 import { ApiTags } from '@nestjs/swagger'
-import multer from 'multer'
 
 @ApiTags('file-upload')
 @Controller('file-upload')
@@ -17,12 +16,7 @@ export class FileUploadController {
 
 	@Post('uploads')
 	@UseInterceptors(FileInterceptor('file'))
-	uploadFile(
-		@UploadedFile() file: Express.Multer.File,
-		@Param('username') username: string,
-	) {
-		// const upload = multer({ dest: 'uploads/' })
-		// console.log(file)
+	uploadFile(@UploadedFile() file: Express.Multer.File) {
 		return this.fileUploadService.handleFileUpload(file)
 	}
 }
