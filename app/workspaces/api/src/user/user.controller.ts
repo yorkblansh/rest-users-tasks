@@ -9,6 +9,8 @@ import { Action } from '../ability/ability.factory/ability.factory'
 import { CheckAbilities } from '../ability/abilities.decorator'
 import { AbilitiesGuard } from '../ability/abilities.guard'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { PermissionsGuard } from '../ability1/permissions.guard'
+import { PERMISSIONS, RequirePermissions } from '../ability1/requirePermission'
 
 interface ReportDates {
 	date_from: string
@@ -63,6 +65,8 @@ export class UserController {
 		return user
 	}
 
+	// @CheckAbilities({ action: Action.Delete, subject: UserDto })
+
 	@Post('/update_user')
 	async updateUser(@Body() body: UpdateUserDto) {
 		const { email, id, name } = body
@@ -81,9 +85,9 @@ export class UserController {
 	}
 
 	@Post('/delete_user')
-	@UseGuards(JwtAuthGuard, AbilitiesGuard)
-	@CheckAbilities({ action: Action.Delete, subject: UserDto })
-	async deleteUser(@Body() body: UserByIdDto) {
+	@RequirePermissions(PERMISSIONS.ADMIN)
+	@UseGuards(JwtAuthGuard, PermissionsGuard)
+	async deleteUser(@Body() body: any) {
 		// const { id } = body
 
 		// const user = await this.prismaService.user.delete({

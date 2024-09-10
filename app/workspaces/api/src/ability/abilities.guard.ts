@@ -11,9 +11,7 @@ import { CHECK_ABILITY, RequiredRule } from './abilities.decorator'
 import { ForbiddenError } from '@casl/ability'
 
 export class AbilitiesGuard implements CanActivate {
-	constructor(
-		@Inject('AbilityFactory') private caslAbilityFactory: AbilityFactory,
-	) {}
+	constructor(private caslAbilityFactory: AbilityFactory) {}
 
 	canActivate(
 		context: ExecutionContext,

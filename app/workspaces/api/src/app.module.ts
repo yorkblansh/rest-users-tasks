@@ -17,15 +17,15 @@ import { AbilitiesGuard } from './ability/abilities.guard'
 		TaskModule,
 		UserModule,
 		AuthModule,
-		AbilityModule,
+		// AbilityModule,
 	],
 	controllers: [AppController],
 	providers: [
 		AppService,
-		{
-			provide: APP_GUARD,
-			useClass: AbilitiesGuard,
-		},
+		// {
+		// 	provide: APP_GUARD,
+		// 	useClass: AbilitiesGuard,
+		// },
 	],
 })
 export class AppModule {}
