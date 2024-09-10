@@ -36,7 +36,10 @@ import { CheckIshpiDiapasonDto } from './dto/check.ishpi.diapason.dto'
 import { TaskDto } from './dto/task.api.dto'
 import { TaskByIdDto } from './dto/task.by.id.api.dto'
 import { UpdateTaskDto } from './dto/update.task.api.dto'
-import { PERMISSIONS, RequirePermissions } from '../ability1/requirePermission'
+import {
+	PERMISSIONS,
+	RequirePermissions,
+} from '../ability1/require.permission.decorator'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { PermissionsGuard } from '../ability1/permissions.guard'
 

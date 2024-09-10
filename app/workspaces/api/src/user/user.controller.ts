@@ -10,7 +10,10 @@ import { CheckAbilities } from '../ability/abilities.decorator'
 import { AbilitiesGuard } from '../ability/abilities.guard'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { PermissionsGuard } from '../ability1/permissions.guard'
-import { PERMISSIONS, RequirePermissions } from '../ability1/requirePermission'
+import {
+	PERMISSIONS,
+	RequirePermissions,
+} from '../ability1/require.permission.decorator'
 
 interface ReportDates {
 	date_from: string

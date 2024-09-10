@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
-import { PERMISSIONS_METADATA_KEY } from './requirePermission'
+import { PERMISSIONS_METADATA_KEY } from './require.permission.decorator'
 import { Reflector } from '@nestjs/core'
-import { Permissions } from './requirePermission'
+import { Permissions } from './require.permission.decorator'
 import { UserDto } from 'src/user/dto/user.api.dto'
 
 @Injectable()
