@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsBoolean, IsEmail, IsString } from 'class-validator'
+import type { Permissions } from '../../ability1/requirePermission'
 
 export class UserDto {
 	/**
@@ -36,10 +37,10 @@ export class UserDto {
 	/**
 	 * is_admin
 	 */
-	@IsBoolean()
+	@IsString()
 	@ApiProperty({
 		example: false,
 		description: 'is_admin',
 	})
-	is_admin: boolean
+	permission: Permissions
 }

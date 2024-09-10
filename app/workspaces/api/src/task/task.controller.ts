@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Put, Patch } from '@nestjs/common'
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Put,
+	Patch,
+	UseGuards,
+} from '@nestjs/common'
 import { pipe } from 'fp-ts/lib/function'
 import path, { join } from 'path'
 import { readFileAsync } from '../utils/readFileAsync'
@@ -28,6 +36,9 @@ import { CheckIshpiDiapasonDto } from './dto/check.ishpi.diapason.dto'
 import { TaskDto } from './dto/task.api.dto'
 import { TaskByIdDto } from './dto/task.by.id.api.dto'
 import { UpdateTaskDto } from './dto/update.task.api.dto'
+import { PERMISSIONS, RequirePermissions } from '../ability1/requirePermission'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { PermissionsGuard } from '../ability1/permissions.guard'
 
 interface ReportDates {
 	date_from: string
@@ -66,15 +77,17 @@ export class TaskController {
 		return task
 	}
 
+	@RequirePermissions(PERMISSIONS.ADMIN)
+	@UseGuards(JwtAuthGuard, PermissionsGuard)
 	@Post('/delete_task')
-	async deleteTask(@Body() body: TaskByIdDto) {
-		const { id } = body
+	async deleteTask(@Body() body: any) {
+		// const { id } = body
 
-		await this.prismaService.task.delete({
-			where: {
-				id,
-			},
-		})
+		// // await this.prismaService.task.delete({
+		// // 	where: {
+		// // 		id,
+		// // 	},
+		// // })
 
 		return 'task was deleted'
 	}

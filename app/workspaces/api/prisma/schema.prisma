@@ -9,12 +9,12 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String  @unique
-  password String
-  is_admin Boolean
-  tasks    Task[]
+  id         Int    @id @default(autoincrement())
+  email      String @unique
+  username   String @unique
+  password   String
+  permission String
+  tasks      Task[]
 }
 
 model Task {

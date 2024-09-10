@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 async function main() {
 	const users = await Promise.all(
-		[0, 1, 2, 3, 4, 5].map((n, i) => {
+		[0, 1].map((n, i) => {
 			return prisma.user.upsert({
 				where: { email: 'alice@prisma.io' },
 				update: {},
@@ -12,7 +12,7 @@ async function main() {
 					email: `user${i}@mail.com`,
 					username: `user${i}`,
 					password: `123`,
-					is_admin: false,
+					permission: 'nonadmin',
 					tasks: {
 						create: {
 							body: `body for the task${i}`,
@@ -25,7 +25,7 @@ async function main() {
 	)
 
 	const admins = await Promise.all(
-		[6, 7].map((n, i) => {
+		[2, 3].map((n, i) => {
 			return prisma.user.upsert({
 				where: { email: 'alice@prisma.io' },
 				update: {},
@@ -33,7 +33,7 @@ async function main() {
 					email: `user${n}@mail.com`,
 					username: `user${n}`,
 					password: `123`,
-					is_admin: true,
+					permission: 'admin',
 				},
 			})
 		}),
