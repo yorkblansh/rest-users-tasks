@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { APP_GUARD } from '@nestjs/core'
 import { AbilitiesGuard } from './ability/abilities.guard'
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { AbilitiesGuard } from './ability/abilities.guard'
 		TaskModule,
 		UserModule,
 		AuthModule,
+		FileUploadModule,
 		// AbilityModule,
 	],
 	controllers: [AppController],
