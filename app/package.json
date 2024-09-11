@@ -4,10 +4,8 @@
 	"author": "Oleg Chepelev <yorkblansh@gmail.com>",
 	"private": true,
 	"scripts": {
-		"api:build:events": "yarn workspace events run build",
-		"react:build:barcode-app": "yarn workspace react run build:barcode-app",
-		"api:build": "yarn workspace api run build",
-		"api:start:prod": "yarn workspace api run start:prod",
+		"api:build": "pnpm workspace api run build",
+		"api:start:prod": "pnpm workspace api run start:prod",
 		"prettier": "prettier --write ."
 	},
 	"workspaces": {
@@ -18,7 +16,7 @@
 	"devDependencies": {
 		"@types/lodash": "^4.14.202",
 		"@types/node": "^20.8.4",
-		"@yarnpkg/pnpify": "^4.0.0-rc.14",
+		"@pnpmpkg/pnpify": "^4.0.0-rc.14",
 		"prettier": "^2.8.1",
 		"typescript": "^4.7.4"
 	},

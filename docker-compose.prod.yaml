@@ -1,0 +1,62 @@
+version: "3.1"
+
+services:
+  node-20:
+    image: node:20
+
+  app:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    container_name: app
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.prod
+    ports:
+      - 90:5055
+      - 5174:5172
+      - 6006:6006
+    volumes:
+      - ./:/app
+    tty: true
+    stdin_open: true
+    restart: on-failure
+    networks:
+      - postgres
+
+  db:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    # volumes:
+    #   - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

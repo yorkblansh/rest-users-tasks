@@ -1,41 +1,8 @@
-import {
-	Controller,
-	Get,
-	Post,
-	Body,
-	Put,
-	Patch,
-	UseGuards,
-	Query,
-} from '@nestjs/common'
-import { pipe } from 'fp-ts/lib/function'
-import path, { join } from 'path'
-import { readFileAsync } from '../utils/readFileAsync'
-import { BarcodeRangeDto } from './dto/barcode.api.dto'
-import D from 'detain'
+import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { barcodeImageBase64Dto } from './dto/barcodeImageBase64.dto'
-import { GetBarcodesDto } from './dto/get.barcodes.dto'
-import { GetReportsDto } from './dto/get.reports.dto'
-import { GetReportListDto } from './dto/get.report.list.dto'
-import { getLatestDateInList } from '../utils/getLatestDateInList'
-import { CreateReportManualDto } from './dto/create.report.manual.dto'
-import { BarcodeListByPartyDto } from './dto/barcode.list.by.barty.dto'
-import { PutReprintDto } from './dto/put.reprint.dto'
-import { GetReprintDto } from './dto/get.reprint.dto'
-import { CreateInvoiceDto } from './dto/create.invoice.dto'
-import * as A from 'fp-ts/lib/Array'
-import { RejectBarcodePartyDto } from './dto/rejectBarcodeParty.dto'
 import { PrismaService } from '../../prisma/prisma.service'
 import _ from 'lodash'
-import { GetBarcodeByPartyDto } from './dto/GetBarcodeByParty.dto'
-import { ReservedRangeDto } from './dto/reserved.dto'
-import { GetReservedRangeDto } from './dto/get.reserved.range.dto'
-import { CreateReservedISHPIDto } from './dto/create.reserved.ishpi.dto'
-import { ReserveISHPIDto } from './dto/reserve.ishpi.dto'
-import { CheckIshpiDiapasonDto } from './dto/check.ishpi.diapason.dto'
 import { TaskDto } from './dto/task.api.dto'
-import { TaskByIdDto } from './dto/task.by.id.api.dto'
 import { UpdateTaskDto } from './dto/update.task.api.dto'
 import {
 	PERMISSIONS,
@@ -44,17 +11,7 @@ import {
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { PermissionsGuard } from '../permissions/permissions.guard'
 import { Prisma } from '@prisma/client'
-
-interface ReportDates {
-	date_from: string
-	date_to: Date
-}
-
-const TEST = process.env.TEST
-
-const postfixTest = TEST === 'TEST' ? '_test' : ''
-
-console.log({ postfixTest })
+import { TaskByIdDto } from './dto/task.by.id.api.dto'
 
 @ApiTags('task')
 @Controller('task')
@@ -97,16 +54,16 @@ export class TaskController {
 	@RequirePermissions(PERMISSIONS.ADMIN)
 	@UseGuards(JwtAuthGuard, PermissionsGuard)
 	@Post('/delete_task')
-	async deleteTask(@Body() body: any) {
-		// const { id } = body
+	async deleteTask(@Body() body: TaskByIdDto) {
+		const { id } = body
 
-		// // await this.prismaService.task.delete({
-		// // 	where: {
-		// // 		id,
-		// // 	},
-		// // })
+		const task = await this.prismaService.task.delete({
+			where: {
+				id,
+			},
+		})
 
-		return 'task was deleted'
+		return `task ${task.name} was deleted`
 	}
 
 	@Post('/update_task')
