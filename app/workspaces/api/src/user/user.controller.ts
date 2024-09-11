@@ -36,7 +36,7 @@ export class UserController {
 
 	@Post('/create_user')
 	async createUser(@Body() body: UserDto) {
-		const { email, name, password } = body
+		const { email, username: name, password } = body
 
 		const user = await this.prismaService.user.create({
 			data: {
@@ -85,7 +85,7 @@ export class UserController {
 
 	@Post('/update_user')
 	async updateUser(@Body() body: UpdateUserDto) {
-		const { email, id, name } = body
+		const { email, id, username: name } = body
 
 		const user = await this.prismaService.user.update({
 			data: {

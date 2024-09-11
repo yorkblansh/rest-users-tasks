@@ -9,6 +9,17 @@ import { PrismaService } from '../../prisma/prisma.service'
 export class UserService {
 	constructor(private readonly prismaService: PrismaService) {}
 
+	async registerUserAvatar(username: string) {
+		await this.prismaService.user.update({
+			where: {
+				username,
+			},
+			data: {
+				has_avatar: true,
+			},
+		})
+	}
+
 	async findOne(username: string) {
 		const user = await this.prismaService.user.findUnique({
 			where: { username },

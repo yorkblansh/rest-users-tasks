@@ -21,7 +21,7 @@ export class UpdateUserDto {
 		example: 'alexander',
 		description: 'user name',
 	})
-	name: string
+	username: string
 
 	/**
 	 * user email
@@ -45,12 +45,12 @@ export class UpdateUserDto {
 	password: string
 
 	/**
-	 * is_admin
+	 * admin or nonadmin
 	 */
 	@IsString()
 	@ApiProperty({
 		example: false,
-		description: 'is_admin',
+		description: 'admin or nonadmin',
 	})
 	permission: Permissions
 }

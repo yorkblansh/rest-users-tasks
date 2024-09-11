@@ -3,8 +3,11 @@ import { FileUploadService } from './file-upload.service'
 import { FileUploadController } from './file-upload.controller'
 import { MulterModule } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
+import { UserModule } from '../user/user.module'
+
 @Module({
 	imports: [
+		UserModule,
 		MulterModule.register({
 			storage: diskStorage({
 				destination: './uploads',

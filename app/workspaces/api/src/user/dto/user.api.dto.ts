@@ -11,7 +11,7 @@ export class UserDto {
 		example: 'alexander',
 		description: 'user name',
 	})
-	name: string
+	username: string
 
 	/**
 	 * user email
