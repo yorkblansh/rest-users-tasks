@@ -12,7 +12,7 @@ async function bootstrap() {
 		.setTitle('index.pdf')
 		.setDescription('API description')
 		.setVersion('0.1')
-		.addTag('genpdf')
+		.addTag('api')
 		.build()
 
 	const document = SwaggerModule.createDocument(app, config)

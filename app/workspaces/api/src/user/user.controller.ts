@@ -5,9 +5,6 @@ import _ from 'lodash'
 import { UserDto } from './dto/user.api.dto'
 import { UserByIdDto } from './dto/user.by.id.api.dto'
 import { UpdateUserDto } from './dto/update.user.api.dto'
-import { Action } from '../ability/ability.factory/ability.factory'
-import { CheckAbilities } from '../ability/abilities.decorator'
-import { AbilitiesGuard } from '../ability/abilities.guard'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { PermissionsGuard } from '../permissions/permissions.guard'
 import {
@@ -15,11 +12,6 @@ import {
 	RequirePermissions,
 } from '../permissions/require.permission.decorator'
 import { Prisma } from '@prisma/client'
-
-interface ReportDates {
-	date_from: string
-	date_to: Date
-}
 
 const TEST = process.env.TEST
 
@@ -36,13 +28,14 @@ export class UserController {
 
 	@Post('/create_user')
 	async createUser(@Body() body: UserDto) {
-		const { email, username: name, password } = body
+		const { email, username: name, password, permission } = body
 
 		const user = await this.prismaService.user.create({
 			data: {
 				email,
 				username: name,
 				password,
+				permission,
 			},
 		})
 
@@ -81,8 +74,6 @@ export class UserController {
 		return user
 	}
 
-	// @CheckAbilities({ action: Action.Delete, subject: UserDto })
-
 	@Post('/update_user')
 	async updateUser(@Body() body: UpdateUserDto) {
 		const { email, id, username: name } = body
@@ -103,15 +94,15 @@ export class UserController {
 	@Post('/delete_user')
 	@RequirePermissions(PERMISSIONS.ADMIN)
 	@UseGuards(JwtAuthGuard, PermissionsGuard)
-	async deleteUser(@Body() body: any) {
-		// const { id } = body
+	async deleteUser(@Body() body: UserByIdDto) {
+		const { id } = body
 
-		// const user = await this.prismaService.user.delete({
-		// 	where: {
-		// 		id,
-		// 	},
-		// })
+		const user = await this.prismaService.user.delete({
+			where: {
+				id,
+			},
+		})
 
-		return 'user was deleted'
+		return `user ${user.username} was deleted`
 	}
 }
