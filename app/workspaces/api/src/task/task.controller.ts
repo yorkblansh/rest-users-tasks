@@ -25,10 +25,12 @@ export class TaskController {
 		@Query('orderBy') orderBy?: string, // Prisma.TaskOrderByWithRelationInput,
 	) {
 		const taskList = await this.prismaService.task.findMany({
-			take: take ? parseInt(take) : undefined,
-			orderBy: orderBy ? JSON.parse(orderBy) : undefined,
-			where: where ? JSON.parse(where) : undefined,
+			// take: take ? parseInt(take) : undefined,
+			// orderBy: orderBy ? JSON.parse(orderBy) : undefined,
+			// where: { name: 'user0' },
+			//  where ? JSON.parse(where) : undefined,
 		})
+		console.log({ taskList })
 
 		return taskList
 	}
