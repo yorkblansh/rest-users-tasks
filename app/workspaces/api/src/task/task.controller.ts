@@ -20,18 +20,14 @@ export class TaskController {
 
 	@Get('/get_all_task')
 	async getTask(
-		@Query('skip') skip?: string,
 		@Query('take') take?: string,
-		@Query('where') where?: Prisma.TaskWhereInput,
-		@Query('cursor') cursor?: Prisma.TaskWhereUniqueInput,
-		@Query('orderBy') orderBy?: Prisma.TaskOrderByWithRelationInput,
+		@Query('where') where?: string, //Prisma.TaskWhereInput,
+		@Query('orderBy') orderBy?: string, // Prisma.TaskOrderByWithRelationInput,
 	) {
 		const taskList = await this.prismaService.task.findMany({
-			skip: skip ? parseInt(skip) : undefined,
 			take: take ? parseInt(take) : undefined,
-			orderBy,
-			where,
-			cursor,
+			orderBy: orderBy ? JSON.parse(orderBy) : undefined,
+			where: where ? JSON.parse(where) : undefined,
 		})
 
 		return taskList

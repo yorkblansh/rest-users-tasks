@@ -28,12 +28,12 @@ export class UserController {
 
 	@Post('/create_user')
 	async createUser(@Body() body: UserDto) {
-		const { email, username: name, password, permission } = body
+		const { email, username, password, permission } = body
 
 		const user = await this.prismaService.user.create({
 			data: {
 				email,
-				username: name,
+				username,
 				password,
 				permission,
 			},
@@ -76,12 +76,15 @@ export class UserController {
 
 	@Post('/update_user')
 	async updateUser(@Body() body: UpdateUserDto) {
-		const { email, id, username: name } = body
+		const { email, id, username, password, permission } = body
 
 		const user = await this.prismaService.user.update({
 			data: {
 				email,
-				username: name,
+				username,
+				id,
+				password,
+				permission,
 			},
 			where: {
 				id,

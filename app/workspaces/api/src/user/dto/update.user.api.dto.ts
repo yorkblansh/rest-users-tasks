@@ -1,12 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsBoolean, IsEmail, IsString } from 'class-validator'
+import {
+	IsBoolean,
+	IsEmail,
+	IsNumber,
+	IsOptional,
+	IsString,
+} from 'class-validator'
 import type { Permissions } from '../../permissions/require.permission.decorator'
 
 export class UpdateUserDto {
 	/**
 	 * 66
 	 */
-	@IsString()
+	@IsNumber()
+	// @IsOptional()
 	@ApiProperty({
 		example: '66',
 		description: 'user id',
