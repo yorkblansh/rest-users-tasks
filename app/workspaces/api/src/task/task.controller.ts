@@ -27,8 +27,7 @@ export class TaskController {
 		const taskList = await this.prismaService.task.findMany({
 			// take: take ? parseInt(take) : undefined,
 			// orderBy: orderBy ? JSON.parse(orderBy) : undefined,
-			// where: { name: 'user0' },
-			//  where ? JSON.parse(where) : undefined,
+			where: where ? JSON.parse(where) : undefined,
 		})
 		console.log({ taskList })
 
@@ -37,12 +36,13 @@ export class TaskController {
 
 	@Post('/create_task')
 	async createTask(@Body() body: TaskDto) {
-		const { body: taskBody, name } = body
+		const { body: taskBody, name, userId } = body
 
 		const task = await this.prismaService.task.create({
 			data: {
 				body: taskBody,
 				name,
+				userId,
 			},
 		})
 
