@@ -5,27 +5,34 @@ RUN apt-get update && apt-get install fish mc vim curl sudo tmux iputils-ping -y
 
 RUN echo 'root:123' | chpasswd
 
+
 RUN mkdir /app
 WORKDIR /app
 
-COPY . /app
-CMD [ "ls" ]
+RUN npm i -g pnpm
 
-# COPY workspaces/api/package.json /app/workspaces/api/package.json
+COPY package.json /app
+COPY pnpm-lock.yaml /app
+COPY pnpm-workspace.yaml /app
 
-# RUN pnpm install
+COPY workspaces/api/package.json /app/workspaces/api/package.json
+
+RUN pnpm install
 
 # COPY workspaces/ /app/workspaces/
-# COPY workspaces/api /app/workspaces/api
+COPY workspaces/api /app/workspaces/api
+RUN pnpm install
+
+
+RUN cd workspaces/api && pnpm run build
+
 # RUN pnpm install
 
+ENV PORT=5055
 
-# RUN pnpm run api:build
+EXPOSE 5055
 
-# RUN pnpm install
+WORKDIR /app/app/workspaces/api
 
-# ENV PORT=5055
 
-# EXPOSE 5055
-
-# CMD [ "pnpm","run", "api:start:prod" ]
+CMD [ "pnpm","run", "start:prod" ]
