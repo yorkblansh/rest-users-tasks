@@ -18,21 +18,15 @@ COPY pnpm-workspace.yaml /app
 COPY workspaces/api/package.json /app/workspaces/api/package.json
 
 RUN pnpm install
-
-# COPY workspaces/ /app/workspaces/
 COPY workspaces/api /app/workspaces/api
 RUN pnpm install
 
-
 RUN cd workspaces/api && pnpm run build
 
-# RUN pnpm install
+WORKDIR /app/app/workspaces/api
 
 ENV PORT=5055
 
 EXPOSE 5055
-
-WORKDIR /app/app/workspaces/api
-
 
 CMD [ "pnpm","run", "start:prod" ]

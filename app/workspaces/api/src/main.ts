@@ -9,7 +9,7 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
 
 	const config = new DocumentBuilder()
-		.setTitle('index.pdf')
+		.setTitle('rest api')
 		.setDescription('API description')
 		.setVersion('0.1')
 		.addTag('api')
