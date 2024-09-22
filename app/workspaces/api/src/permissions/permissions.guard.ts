@@ -18,12 +18,8 @@ export class PermissionsGuard implements CanActivate {
 				context.getHandler(),
 			) || []
 
-		const isAllowedToProceed = permissions.find((v) => v === user.permission)
+		const matchedPermissions = permissions.find((v) => v === user.permission)
 
-		console.log({
-			user: req.user,
-		})
-
-		return isAllowedToProceed !== undefined ? true : false
+		return matchedPermissions !== undefined ? true : false
 	}
 }
