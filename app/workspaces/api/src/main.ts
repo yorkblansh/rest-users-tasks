@@ -1,9 +1,10 @@
-import { ValidationPipe } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
+import { HttpStatus, ValidationPipe } from '@nestjs/common'
+import { NestFactory, HttpAdapterHost } from '@nestjs/core'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { Logger } from '@nestjs/common'
 import express from 'express'
+import { PrismaClientExceptionFilter } from 'nestjs-prisma'
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
@@ -23,6 +24,16 @@ async function bootstrap() {
 	app.use(express.urlencoded({ limit: '50mb' }))
 	app.enableCors({ origin: '*' })
 	app.useGlobalPipes(new ValidationPipe({ transform: true }))
+	const { httpAdapter } = app.get(HttpAdapterHost)
+	app.useGlobalFilters(
+		new PrismaClientExceptionFilter(httpAdapter, {
+			// Prisma Error Code: HTTP Status Response
+			P2000: HttpStatus.BAD_REQUEST,
+			P2002: HttpStatus.CONFLICT,
+			P2003: HttpStatus.FAILED_DEPENDENCY,
+			P2025: HttpStatus.NOT_FOUND,
+		}),
+	)
 
 	const port = Number(5055)
 

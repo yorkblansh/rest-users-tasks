@@ -31,11 +31,7 @@ export class UserController {
 		type: UserDto,
 	})
 	async createUser(@Body() userDto: UserDto) {
-		try {
-			return this.userService.create(userDto)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.userService.create(userDto)
 	}
 
 	@Get('/get_all_users')
@@ -45,11 +41,7 @@ export class UserController {
 		type: [UserDto],
 	})
 	async getAllUsers() {
-		try {
-			return this.userService.findAll()
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.userService.findAll()
 	}
 
 	@Get('/get_user_by_id')
@@ -61,11 +53,7 @@ export class UserController {
 	async getUserById(@Body() body: UserByIdDto) {
 		const { id } = body
 
-		try {
-			return this.userService.findById(id)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.userService.findById(id)
 	}
 
 	@Post('/update_user')
@@ -75,11 +63,7 @@ export class UserController {
 		type: UserDto,
 	})
 	async updateUser(@Body() userDto: UpdateUserDto) {
-		try {
-			return this.userService.update(userDto)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.userService.update(userDto)
 	}
 
 	@Post('/delete_user')
@@ -93,10 +77,6 @@ export class UserController {
 	async deleteUser(@Body() body: UserByIdDto) {
 		const { id } = body
 
-		try {
-			return this.userService.delete(id)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.userService.delete(id)
 	}
 }

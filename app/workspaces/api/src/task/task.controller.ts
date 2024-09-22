@@ -28,11 +28,7 @@ export class TaskController {
 	})
 	@ApiBearerAuth()
 	async getAllTasks() {
-		try {
-			return this.taskService.findAll()
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.taskService.findAll()
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -44,11 +40,7 @@ export class TaskController {
 	})
 	@ApiBearerAuth()
 	async createTask(@Body() dto: TaskDto) {
-		try {
-			return this.taskService.create(dto)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.taskService.create(dto)
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -60,11 +52,7 @@ export class TaskController {
 	})
 	@ApiBearerAuth()
 	async deleteTask(@Body() dto: TaskByIdDto) {
-		try {
-			return this.taskService.delete(dto)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+		return this.taskService.delete(dto)
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -75,11 +63,7 @@ export class TaskController {
 		type: TaskDto,
 	})
 	@ApiBearerAuth()
-	async updateTask(@Body() dto: UpdateTaskDto) {
-		try {
-			return this.taskService.update(dto)
-		} catch (error) {
-			throw new BadRequestException(error.meta)
-		}
+	updateTask(@Body() dto: UpdateTaskDto) {
+		return this.taskService.update(dto)
 	}
 }
