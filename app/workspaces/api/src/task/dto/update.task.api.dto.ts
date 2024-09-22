@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNumber, IsString } from 'class-validator'
+import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class UpdateTaskDto {
 	/**
@@ -16,6 +16,7 @@ export class UpdateTaskDto {
 	 * task name
 	 */
 	@IsString()
+	@IsOptional()
 	@ApiProperty({
 		example: 'task1',
 		description: 'task name',
@@ -26,6 +27,7 @@ export class UpdateTaskDto {
 	 * task body
 	 */
 	@IsString()
+	@IsOptional()
 	@ApiProperty({
 		example: 'smth in the task',
 		description: 'task body',

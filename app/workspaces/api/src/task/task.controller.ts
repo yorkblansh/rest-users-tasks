@@ -4,27 +4,20 @@ import {
 	Post,
 	Body,
 	UseGuards,
-	Query,
 	BadRequestException,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { PrismaService } from '../../prisma/prisma.service'
 import _ from 'lodash'
 import { TaskDto } from './dto/task.api.dto'
 import { UpdateTaskDto } from './dto/update.task.api.dto'
-import {
-	PERMISSIONS,
-	RequirePermissions,
-} from '../permissions/require.permission.decorator'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { PermissionsGuard } from '../permissions/permissions.guard'
-import { Prisma } from '@prisma/client'
 import { TaskByIdDto } from './dto/task.by.id.api.dto'
+import { TaskService } from './task.service'
 
 @ApiTags('task')
 @Controller('task')
 export class TaskController {
-	constructor(private readonly prismaService: PrismaService) {}
+	constructor(private readonly taskService: TaskService) {}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/get_all_task')
@@ -33,20 +26,10 @@ export class TaskController {
 		description: 'list of all tasks',
 		type: [TaskDto],
 	})
-	@ApiBearerAuth('get_all_task')
-	async getTask() {
-		// @Query('orderBy') orderBy?: Prisma.TaskOrderByWithRelationInput, // @Query('cursor') cursor?: Prisma.TaskWhereUniqueInput, // @Query('where') where?: Prisma.TaskWhereInput, // @Query('take') take?: string, // @Query('skip') skip?: string,
-
+	@ApiBearerAuth()
+	async getAllTasks() {
 		try {
-			const taskList = await this.prismaService.task.findMany({
-				// skip: skip ? parseInt(skip) : undefined,
-				// take: take ? parseInt(take) : undefined,
-				// orderBy,
-				// where,
-				// cursor,
-			})
-
-			return taskList
+			return this.taskService.findAll()
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -59,20 +42,10 @@ export class TaskController {
 		description: 'created task',
 		type: TaskDto,
 	})
-	@ApiBearerAuth('create_task')
-	async createTask(@Body() body: TaskDto) {
-		const { body: taskBody, name, userId } = body
-
+	@ApiBearerAuth()
+	async createTask(@Body() dto: TaskDto) {
 		try {
-			const task = await this.prismaService.task.create({
-				data: {
-					body: taskBody,
-					name,
-					userId,
-				},
-			})
-
-			return task
+			return this.taskService.create(dto)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -85,18 +58,10 @@ export class TaskController {
 		description: 'delete task',
 		type: TaskDto,
 	})
-	@ApiBearerAuth('delete_task')
-	async deleteTask(@Body() body: TaskByIdDto) {
-		const { id } = body
-
+	@ApiBearerAuth()
+	async deleteTask(@Body() dto: TaskByIdDto) {
 		try {
-			const task = await this.prismaService.task.delete({
-				where: {
-					id,
-				},
-			})
-
-			return `task ${task.name} was deleted`
+			return this.taskService.delete(dto)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -109,22 +74,10 @@ export class TaskController {
 		description: 'updated task',
 		type: TaskDto,
 	})
-	@ApiBearerAuth('update_task')
-	async updateTask(@Body() body: UpdateTaskDto) {
-		const { body: taskBody, id, name } = body
-
+	@ApiBearerAuth()
+	async updateTask(@Body() dto: UpdateTaskDto) {
 		try {
-			const task = await this.prismaService.task.update({
-				data: {
-					body: taskBody,
-					name,
-				},
-				where: {
-					id,
-				},
-			})
-
-			return task
+			return this.taskService.update(dto)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
