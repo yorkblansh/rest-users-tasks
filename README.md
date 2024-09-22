@@ -13,11 +13,11 @@ docker compose up --build -d
 swagger:
 
 ```
-http://localhost:90/swagger
+localhost:90/swagger
 ```
 
 postman:
 
 ```
-https://www.postman.com/maintenance-geologist-21552298/pub-yorkblansh/collection/we6juk7/rest-api
+https://elements.getpostman.com/redirect?entityId=22131120-703de95e-0af5-4768-bc8a-e29cacf3ec1a&entityType=collection
 ```
