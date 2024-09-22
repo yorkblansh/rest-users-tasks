@@ -4,6 +4,7 @@ import { FileUploadController } from './file-upload.controller'
 import { MulterModule } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { UserModule } from '../user/user.module'
+import { UserDto } from 'src/user/dto/user.api.dto'
 
 @Module({
 	imports: [
@@ -12,14 +13,15 @@ import { UserModule } from '../user/user.module'
 			storage: diskStorage({
 				destination: './uploads',
 				filename: (req, file, cb) => {
-					const username = req.query.username as string
+					const user = req.user as UserDto
 
-					cb(null, username + '.jpg')
+					cb(null, user.username + '.jpg')
 				},
 			}),
 		}),
 	],
 	controllers: [FileUploadController],
 	providers: [FileUploadService],
+	exports: [FileUploadService],
 })
 export class FileUploadModule {}
