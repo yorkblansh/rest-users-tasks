@@ -4,16 +4,9 @@ import {
 	Post,
 	Body,
 	UseGuards,
-	Query,
 	BadRequestException,
 } from '@nestjs/common'
-import {
-	ApiBearerAuth,
-	ApiOperation,
-	ApiResponse,
-	ApiTags,
-} from '@nestjs/swagger'
-import { PrismaService } from '../../prisma/prisma.service'
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
 import _ from 'lodash'
 import { UserDto } from './dto/user.api.dto'
 import { UserByIdDto } from './dto/user.by.id.api.dto'
@@ -24,14 +17,12 @@ import {
 	PERMISSIONS,
 	RequirePermissions,
 } from '../permissions/require.permission.decorator'
-import { Prisma } from '@prisma/client'
+import { UserService } from './user.service'
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-	constructor(
-		private readonly prismaService: PrismaService, // private readonly authService: AuthService,
-	) {}
+	constructor(private readonly userService: UserService) {}
 
 	@Post('/create_user')
 	@ApiResponse({
@@ -39,20 +30,9 @@ export class UserController {
 		description: 'create user',
 		type: UserDto,
 	})
-	async createUser(@Body() body: UserDto) {
-		const { email, username, password, permission } = body
-
+	async createUser(@Body() userDto: UserDto) {
 		try {
-			const user = await this.prismaService.user.create({
-				data: {
-					email,
-					username,
-					password,
-					permission,
-				},
-			})
-
-			return user
+			return this.userService.create(userDto)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -64,18 +44,9 @@ export class UserController {
 		description: 'list of all users',
 		type: [UserDto],
 	})
-	async getUser() {
-		// @Query('orderBy') orderBy?: Prisma.UserOrderByWithRelationInput, // @Query('cursor') cursor?: Prisma.UserWhereUniqueInput, // @Query('where') where?: Prisma.UserWhereInput, // @Query('take') take?: string, // @Query('skip') skip?: string,
+	async getAllUsers() {
 		try {
-			const userList = await this.prismaService.user.findMany({
-				// skip: skip ? parseInt(skip) : undefined,
-				// take: take ? parseInt(take) : undefined,
-				// orderBy,
-				// where,
-				// cursor,
-			})
-
-			return userList
+			return this.userService.findAll()
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -91,13 +62,7 @@ export class UserController {
 		const { id } = body
 
 		try {
-			const user = await this.prismaService.user.findUnique({
-				where: {
-					id,
-				},
-			})
-
-			return user
+			return this.userService.findById(id)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -109,24 +74,9 @@ export class UserController {
 		description: 'updated user info',
 		type: UserDto,
 	})
-	async updateUser(@Body() body: UpdateUserDto) {
-		const { email, id, username, password, permission } = body
-
+	async updateUser(@Body() userDto: UpdateUserDto) {
 		try {
-			const user = await this.prismaService.user.update({
-				data: {
-					email,
-					username,
-					id,
-					password,
-					permission,
-				},
-				where: {
-					id,
-				},
-			})
-
-			return user
+			return this.userService.update(userDto)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}
@@ -138,20 +88,13 @@ export class UserController {
 	@ApiResponse({
 		status: 200,
 		description: 'delete user, require bearer auth and admin role',
-		// type: `user user0 was deleted`,
 	})
-	@ApiBearerAuth('delete_user')
+	@ApiBearerAuth()
 	async deleteUser(@Body() body: UserByIdDto) {
 		const { id } = body
 
 		try {
-			const user = await this.prismaService.user.delete({
-				where: {
-					id,
-				},
-			})
-
-			return user
+			return this.userService.delete(id)
 		} catch (error) {
 			throw new BadRequestException(error.meta)
 		}

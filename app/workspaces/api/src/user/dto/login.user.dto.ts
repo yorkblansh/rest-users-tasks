@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import {
-	IsBoolean,
-	IsEmail,
-	IsNumber,
-	IsOptional,
-	IsString,
-} from 'class-validator'
-import type { Permissions } from '../../permissions/require.permission.decorator'
+import { IsString } from 'class-validator'
 
 export class LoginUserDto {
 	/**
